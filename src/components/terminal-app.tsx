@@ -8,14 +8,12 @@ export function TerminalApp() {
   return (
     <Flex
       borderWidth="1px"
-      margin={'auto'}
-      mt={'12'}
       width="100%"
-      maxW="1080px"
-      minH="80vh"
+      minWidth={"780px"}
+      maxWidth="1080px"
+      minHeight={"80vh"}
       borderRadius={'md'}
       bg={'var(--bg)'}
-      flexDirection="column"
       overflow="hidden"
     >
       <Grid gap={0} flex={1} templateRows="auto 1fr auto" templateColumns="2fr 6fr">

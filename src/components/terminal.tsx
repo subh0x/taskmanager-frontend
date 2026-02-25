@@ -1,4 +1,4 @@
-import { Box, Flex } from '@chakra-ui/react';
+import { Box, Flex, Input, InputGroup, Text } from '@chakra-ui/react';
 
 export function Terminal() {
   return (
@@ -16,7 +16,8 @@ export function Terminal() {
 function TerminalOutput() {
   return (
     <Box fontSize={'sm'} color={'var(--dim)'} p={2}>
-      Welcome to taskmanager-cli! Type 'help' to get started.
+      <Text>Welcome to taskmanager-cli! Type 'help' to get started.</Text>
+      
     </Box>
   );
 }
@@ -25,7 +26,9 @@ function TerminalInput() {
   return (
     <Box>
       <Box fontSize={'sm'} color={'var(--dim)'} bg={'var(--surface2)'} p={2}>
-        user@taskmanager:~$
+        <InputGroup startElement={<Text ml={2} color={'var(--prompt)'} fontWeight={'bold'}>user@taskmanager: ~$</Text>}>
+            <Input ps={"22ch"} color={'var(--text)'} fontWeight={'bold'}/>
+        </InputGroup>
       </Box>
     </Box>
   );
