@@ -3,6 +3,7 @@ import { create } from 'zustand';
 interface TerminalState {
   input: string;
   updateInput: (input: string) => void;
+  clearInput: () => void;
 
   output: string;
   updateOutput: (output: string) => void;
@@ -17,9 +18,10 @@ interface TerminalState {
   decCmdHistIdx: () => void;
 }
 
-export const useTerminal = create<TerminalState>((set) => ({
+export const useTerminalStore = create<TerminalState>((set) => ({
   input: '',
   updateInput: (newInput) => set({ input: newInput }),
+  clearInput: () => set({ input: '' }),
 
   output: '',
   updateOutput: (newOutput) => set({ output: newOutput }),

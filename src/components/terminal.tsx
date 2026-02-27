@@ -1,34 +1,22 @@
 import { Box, Flex, Input, InputGroup, Text } from '@chakra-ui/react';
-import { useState } from 'react';
-import { useTerminal } from '@/stores/terminal-store';
+import { useTerminalStore } from '@/stores/terminal-store';
 
 export function Terminal() {
-  const [output, setOutput] = useState<string>('');
-  // Keep track of the commands entered:
-  const [cmdHistIdx, setCmdHistIdx] = useState<number>(0);
-  const [cmdHistory, setCmdHistory] = useState<string[]>(['']);
-  console.log(cmdHistIdx);
-  console.log(cmdHistory);
-
   return (
     <Flex height={'100%'} maxHeight={'800px'} flexDirection={'column'}>
       <Box flex={1} overflowY={'auto'}>
-        <TerminalOutput output={output} />
+        <TerminalOutput />
       </Box>
       <Box position={'sticky'} bottom={0} flexShrink={0}>
-        <TerminalInput
-          setOutput={setOutput}
-          setCmdHistory={setCmdHistory}
-          cmdHistory={cmdHistory}
-          cmdHistIdx={cmdHistIdx}
-          setCmdHistIdx={setCmdHistIdx}
-        />
+        <TerminalInput />
       </Box>
     </Flex>
   );
 }
 
-function TerminalOutput({ output }) {
+function TerminalOutput() {
+  const { output } = useTerminalStore();
+
   return (
     <Box fontSize={'sm'} color={'var(--dim)'} p={2}>
       <Text>Welcome to taskmanager-cli! Type 'help' to get started.</Text>
@@ -37,8 +25,20 @@ function TerminalOutput({ output }) {
   );
 }
 
-function TerminalInput({ setOutput, setCmdHistory, cmdHistory, cmdHistIdx, setCmdHistIdx }) {
-  const [input, setInput] = useState('');
+function TerminalInput() {
+  const {
+    input,
+    updateInput,
+    clearInput,
+    updateOutput,
+    cmdHistIdx,
+    incCmdHistIdx,
+    decCmdHistIdx,
+    updateCmdHistIdx,
+    cmdHistory,
+    updateCmdHistory,
+  } = useTerminalStore();
+  // const [input, setInput] = useState('');
 
   return (
     <Box>
@@ -56,18 +56,22 @@ function TerminalInput({ setOutput, setCmdHistory, cmdHistory, cmdHistIdx, setCm
             fontWeight={'bold'}
             value={input}
             onChange={(e) => {
-              setInput(e.currentTarget.value);
+              updateInput(e.currentTarget.value);
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 const terminalInputStr = e.currentTarget.value;
                 // Send the currentTarget Value for processing the commands and displaying in the output.
                 if (terminalInputStr != '') {
-                  setOutput(terminalInputStr);
+                  // setOutput(terminalInputStr);
+                  updateOutput(terminalInputStr);
                   // Keep track of the output.
-                  setCmdHistory((prev) => [...prev, terminalInputStr]);
-                  setCmdHistIdx((prev) => prev + 1);
-                  setInput(() => ''); // Clear the input
+                  // setCmdHistory((prev) => [...prev, terminalInputStr]);
+                  updateCmdHistory(terminalInputStr);
+                  // setCmdHistIdx((prev) => prev + 1);
+                  incCmdHistIdx();
+                  // setInput(() => ''); // Clear the input
+                  clearInput();
                 }
               }
 
@@ -76,20 +80,19 @@ function TerminalInput({ setOutput, setCmdHistory, cmdHistory, cmdHistIdx, setCm
               if (e.key === 'ArrowUp') {
                 // Allow for the Arrow up commands only till the idx val = 0
                 if (cmdHistIdx > 0 && cmdHistIdx <= cmdHistory.length) {
-                  const prevIdx = cmdHistIdx - 1;
-                  setCmdHistIdx(prevIdx);
-                  setInput(cmdHistory[cmdHistIdx] ?? '');
+                  decCmdHistIdx();
+                  updateInput(cmdHistory[cmdHistIdx] ?? '');
                 }
               }
 
               if (e.key === 'ArrowDown') {
                 if (cmdHistIdx < cmdHistory.length - 1) {
                   const nextIdx = cmdHistIdx + 1;
-                  setCmdHistIdx(nextIdx);
-                  setInput(cmdHistory[nextIdx] ?? '');
+                  incCmdHistIdx();
+                  updateInput(cmdHistory[nextIdx] ?? '');
                 } else {
-                  setCmdHistIdx(cmdHistory.length);
-                  setInput('');
+                  updateCmdHistIdx(cmdHistory.length);
+                  updateInput('');
                 }
               }
             }}
