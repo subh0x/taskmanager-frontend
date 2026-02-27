@@ -9,9 +9,9 @@ export function TerminalApp() {
     <Flex
       borderWidth="1px"
       width="100%"
-      minWidth={"780px"}
+      minWidth={'780px'}
       maxWidth="1080px"
-      minHeight={"80vh"}
+      minHeight={'80vh'}
       borderRadius={'md'}
       bg={'var(--bg)'}
       overflow="hidden"

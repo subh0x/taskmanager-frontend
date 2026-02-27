@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import { Box, Code, Flex, HStack, Separator, Text } from '@chakra-ui/react';
 
 const MAIN_COMMAND_LIST = [
@@ -13,7 +14,7 @@ export function QuickAccessToolBar() {
     <Flex fontSize={'sm'} p={2} justifyContent={'space-between'} alignItems={'center'}>
       <HStack gap="2" align="flex-start">
         {MAIN_COMMAND_LIST.map(({ cmd, desc }, idx) => (
-          <>
+          <Fragment key={cmd}>
             <Box key={cmd} textAlign="center">
               <Code variant={'outline'} px={2}>
                 {cmd}
@@ -23,8 +24,10 @@ export function QuickAccessToolBar() {
               </Text>
             </Box>
             {/* Don't render separator for last item */}
-            {(idx !==  MAIN_COMMAND_LIST.length-1) && <Separator orientation={'vertical'} height={10} />} 
-          </>
+            {idx !== MAIN_COMMAND_LIST.length - 1 && (
+              <Separator orientation={'vertical'} height={10} />
+            )}
+          </Fragment>
         ))}
       </HStack>
       <Box textAlign="center">
